@@ -20,7 +20,7 @@ GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.PATH_LIGHT = "It's a light"
 
 -----------------------------
 
-local path_lightrecipe = GLOBAL.Recipe(
+local path_lightrecipe = GLOBAL.AddRecipe(
     "path_light",
     {
         GLOBAL.Ingredient("lantern", 1),
