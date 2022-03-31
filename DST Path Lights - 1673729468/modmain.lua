@@ -23,21 +23,27 @@ GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.PATH_LIGHT = "It's a light"
 
 -----------------------------
 
-local rec = env.AddRecipe(
-	"path_light", --prefab name
+local rec = env.AddRecipe2(
+	"path_light", --prefab name - name
 	{
 		Ingredient("lantern", 1),
 		Ingredient("lightbulb", 2)
-	}, -- ingredient list
-	GLOBAL.RECIPETABS.LIGHT, -- recipe tab
-	GLOBAL.TECH.SCIENCE_TWO, -- tech level
-	"path_light_placer", -- placer of the recipe
-	0, -- range to closest object
-	nil, -- i honestly dont know what this does
-	nil, -- same here
-	nil, -- same here
-	"images/inventoryimages/path_light.xml", -- inventory image
-	"path_light.tex" -- object image?
+	}, -- ingredient list - ingredients
+	GLOBAL.TECH.SCIENCE_TWO, -- tech level - tech
+	{
+		min_spacing = 0,
+		-- nounlock,
+		-- numtogive,
+		-- builder_tag,
+		atlas = "images/inventoryimages/path_light.xml",
+		image = "path_light.tex",
+		-- testfn,
+		-- product,
+		-- build_mode,
+		-- build_distance,
+		placer = "path_light_placer",
+	},
+	{"LIGHT"} -- filter
 )
 
 --------------------------------
