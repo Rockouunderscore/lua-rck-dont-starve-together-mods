@@ -1,12 +1,12 @@
 
 Assets={
 	Asset("ATLAS", "images/inventoryimages/path_light.xml"),
-	Asset("IMAGE", "images/inventoryimages/path_light.tex"),
+	Asset("IMAGE", "images/inventoryimages/path_light.tex")
 }
 
 PrefabFiles = 
 {
-	"path_light",
+	"path_light"
 }
 
 -- STRINGS = GLOBAL.STRINGS
@@ -36,7 +36,7 @@ local rec = env.AddRecipe(
 	nil, -- i honestly dont know what this does
 	nil, -- same here
 	nil, -- same here
-	"images/inventoryimages/path_light.xml" -- inventory image
+	"images/inventoryimages/path_light.xml", -- inventory image
 	"path_light.tex" -- object image?
 )
 
