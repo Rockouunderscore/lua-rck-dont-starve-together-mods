@@ -1,8 +1,8 @@
 
-name = "DST Path Lights v.1.0.6.2"
+name = "DST Path Lights v.1.0.6.3"
 description = "My costum verison of DST path light. I added a light radius option and you can place them anywhere without restriction"
 author = "Rockou_"
-version = "1.0.6.2"
+version = "1.0.6.3"
 
 forumthread = ""
 
