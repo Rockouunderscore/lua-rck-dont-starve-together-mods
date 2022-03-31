@@ -13,6 +13,8 @@ PrefabFiles =
 -- Recipe = GLOBAL.Recipe
 -- Ingredient = GLOBAL.Ingredient
 -- TECH = GLOBAL.TECH
+local env = env
+GLOBAL.setfenv(1, GLOBAL)
 
 GLOBAL.STRINGS.NAMES.PATH_LIGHT = "Path Light"
 GLOBAL.STRINGS.RECIPE_DESC.PATH_LIGHT = "It lights your path."
@@ -20,20 +22,20 @@ GLOBAL.STRINGS.CHARACTERS.GENERIC.DESCRIBE.PATH_LIGHT = "It's a light"
 
 -----------------------------
 
-local path_lightrecipe = GLOBAL.AddRecipe(
-    "path_light",
+local rec = env.AddRecipe(
+    "path_light", --prefab name
     {
-        GLOBAL.Ingredient("lantern", 1),
-        GLOBAL.Ingredient("lightbulb", 2),
-    },
-    GLOBAL.RECIPETABS.LIGHT,
-    GLOBAL.TECH.SCIENCE_TWO,
-    "path_light_placer",
-    0,
-    nil,
-    nil,
-    nil,
-    "images/inventoryimages/path_light.xml"
+        Ingredient("lantern", 1),
+        Ingredient("lightbulb", 2)
+    }, -- ingredient list
+    GLOBAL.RECIPETABS.LIGHT, -- recipe tab
+    GLOBAL.TECH.SCIENCE_TWO, -- tech level
+    "path_light_placer", -- placer of the recipe
+    0, -- range to closest object
+    nil, -- i honestly dont know what this does
+    nil, -- same here
+    nil, -- same here
+    "images/inventoryimages/path_light.xml" -- recipe image
 )
 
 --------------------------------
