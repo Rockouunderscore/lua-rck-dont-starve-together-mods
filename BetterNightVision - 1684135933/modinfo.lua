@@ -1,18 +1,12 @@
-name = "  BetterNightVision V1.5.1"
+name = "BetterNightVision V1.5.2"
 description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
-From Fuzzy Waffle-
-Line 13>  modmain.lua if _G.ThePlayer == nil then return else
-
-From Tony
-Line6>    local function InGame()
-Line7>    return GLOBAL.ThePlayer and GLOBAL.ThePlayer.HUD and not GLOBAL.ThePlayer.HUD:HasInputFocus()
-Line8>    end
-Line12>   if not InGame() then return end]]
+Thanks to Fuzzy Waffle and Tony
+The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
 
 author = "Rockou_ With Help From the Community"
-version = "BNV 1.5.1"
+version = "BNV 1.5.2"
 api_version_dst = 10
 
 dst_compatible = true
@@ -27,11 +21,19 @@ for i = 1, #keys do
 end
 keylist[#keylist + 1] = {description = "Disabled", data = false}
 
-local function AddConfig(label, name, options, default, hover)
-    return {name = name, label = label, hover = hover or "", options = options, default = default}
-end
-
-configuration_options = 
-{
-    AddConfig("Night vision Toggle Key", "nvk", keylist, "KEY_X")
+configuration_options = {
+    {
+        label = "Night vision Toggle Key",
+        hover = "The key that will toggle night vision",
+        name = "nvk",
+        options = keylist,
+        default = "KEY_X",
+    }--,
+    --{
+    --    label = "CC table override Toggle Key",
+    --    hover = "The key that will toggle color cube table override",
+    --    name = "cck",
+    --    options = keylist,
+    --    default = "KEY_X",
+    --}
 }

@@ -1,5 +1,6 @@
 --NOTE THAT THE CODE USED HERE IS EXTRACTED FROM THE GAME AND ONLY THE COLOURCUBES ASSETS LINKS HAVE BEEN CHANGED
 
+
 local GHOSTVISION_COLOURCUBES =
 {
     day = "images/colour_cubes/day05_cc.tex",
@@ -138,7 +139,7 @@ function PlayerVision:UpdateCCTable()
         or (self.nightmarevision and NIGHTMARE_COLORCUBES)
         or nil
 
-    local ccphasefn = 
+    local ccphasefn =
         (cctable == NIGHTVISION_COLOURCUBES and NIGHTVISION_PHASEFN)
         or (cctable == NIGHTMARE_COLORCUBES and NIGHTMARE_PHASEFN)
         or nil
