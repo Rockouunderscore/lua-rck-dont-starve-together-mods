@@ -1,4 +1,4 @@
 # Rockou_'s Don't Starve Together Mods
-this repository contains all of my Don't Starve Together mods
+This repository contains all of my Don't Starve Together mods
 
 Note they are not perfect, they are mostly mods I've made for myself and thought would be fun to share
