@@ -10,7 +10,8 @@ end
 -- purple_moon_cc is fullmoon
 -- ruins_light_cc is danger time in ruins
 
-local togglecc = {
+local NEW_NIGHTVISION_COLOURCUBES =
+{
     day = "images/colour_cubes/day05_cc.tex",
     dusk = "images/colour_cubes/day05_cc.tex",
     night = "images/colour_cubes/day05_cc.tex",
@@ -23,11 +24,27 @@ local function InGame()
 end
 -- end of block
 
+local function ToggleNightVision()
+
+    local playervision = GLOBAL.ThePlayer.components.playervision
+
+    local newNightVisionActive = not playervision:HasNightVision()
+
+    playervision:ForceNightVision(newNightVisionActive)
+
+    -- if
+    -- active   => NIGHTVISION_COLOURCUBES
+    -- else     => nil
+    playervision:SetCustomCCTable(newNightVisionActive and NEW_NIGHTVISION_COLOURCUBES or nil)
+
+    GLOBAL.ThePlayer.components.talker:Say("Night Vision: "..tostring(newNightVisionActive))
+
+end
+
 GLOBAL.TheInput:AddKeyUpHandler(GetKeyFromConfig("nvk"), function ()
     if not InGame() then return end --Thanks to Tony - Can be found in the mod's comments
         if GLOBAL.ThePlayer == nil then return else --Thanks to Fuzzy Waffle - Can be found in the mod's Discusions "Bugs / Crashs"
-            GLOBAL.ThePlayer.components.playervision:ForceNightVision(not GLOBAL.ThePlayer.components.playervision:HasNightVision())
-            GLOBAL.ThePlayer.components.talker:Say("Night Vision: "..tostring(GLOBAL.ThePlayer.components.playervision:HasNightVision()))
+            ToggleNightVision()
         end
 end
 )
