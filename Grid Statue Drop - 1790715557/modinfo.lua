@@ -1,6 +1,6 @@
 name = "  Grid statue drop"
-description = "Drops statues on the wall grid
-All code is from eXiGe - I have not created this mod"
+description = [[Drops statues on the wall grid
+All code is from eXiGe - I have not created this mod]]
 
 author = "eXiGe - Rockou_"
 
