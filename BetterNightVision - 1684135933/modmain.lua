@@ -4,19 +4,21 @@ local function GetKeyFromConfig(config)
     return key and (type(key) == "number" and key or GLOBAL[key])
 end
 
+---@type number
 local NIGHTVISION_TOGGLE_KEY = GetKeyFromConfig("NIGHTVISION_TOGGLE_KEY")
+
 ---@type boolean
-local NIGHTVISION_OVERRIDE_COLOR_CUBES = GetModConfigData("NIGHTVISION_OVERRIDE_COLOR_CUBES")
+local NIGHTVISION_COLOR_CUBES_OVERRIDE_ENABLE = GetModConfigData("NIGHTVISION_COLOR_CUBES_OVERRIDE_ENABLE")
 
 ---@type string
-local NIGHTVISION_USE_COLORCUBES = GetModConfigData("NIGHTVISION_USE_COLORCUBES")
+local NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE = GetModConfigData("NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE")
 
 ---@type table<string, string>
 local OVERRIDE_COLOR_CUBES = {
-    day = NIGHTVISION_USE_COLORCUBES,
-    dusk = NIGHTVISION_USE_COLORCUBES,
-    night = NIGHTVISION_USE_COLORCUBES,
-    full_moon = NIGHTVISION_USE_COLORCUBES
+    day = NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE,
+    dusk = NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE,
+    night = NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE,
+    full_moon = NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE
 }
 
 -- Thanks to Tony - Can be found in the mod's comments
@@ -37,9 +39,9 @@ local function ToggleNightVision()
 
     -- apply color cubes
 
-    if NIGHTVISION_OVERRIDE_COLOR_CUBES then
+    if NIGHTVISION_COLOR_CUBES_OVERRIDE_ENABLE then
 
-        local active_colour_cubes = nightvision_active and NIGHTVISION_USE_COLORCUBES ~= "" and OVERRIDE_COLOR_CUBES or nil
+        local active_colour_cubes = nightvision_active and NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE ~= "" and OVERRIDE_COLOR_CUBES or nil
 
         -- GLOBAL.ThePlayer.components.playervision:SetCustomCCTable(active_colour_cubes)
 

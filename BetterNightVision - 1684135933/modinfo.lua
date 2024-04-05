@@ -1,4 +1,4 @@
-name = "BetterNightVision V18"
+name = "BetterNightVision V19"
 description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
@@ -6,7 +6,7 @@ Thanks to Fuzzy Waffle and Tony
 The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
 
 author = "Rockou_ With Help From the Community"
-version = "18"
+version = "19"
 api_version_dst = 10
 
 dst_compatible = true
@@ -49,7 +49,7 @@ configuration_options = {
     {
         label = "Enable Color Cubes Override",
         hover = "Whether to override color cubes or not",
-        name = "NIGHTVISION_OVERRIDE_COLOR_CUBES",
+        name = "NIGHTVISION_COLOR_CUBES_OVERRIDE_ENABLE",
         options = {
             {
                 description = "Enabled",
@@ -65,7 +65,7 @@ configuration_options = {
     {
         label = "Color Cubes Override Value",
         hover = "Color Cubes to use",
-        name = "NIGHTVISION_USE_COLORCUBES",
+        name = "NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE",
         options = {
             { description = "Default",         data = "",                                                  hover = "Keep what would be the current filter, without moggle vision"},
             { description = "Identity",        data = "images/colour_cubes/identity_colourcube.tex",       hover = "Default \"Identity\" filter"},
