@@ -1,4 +1,4 @@
-name = "BetterNightVision V19"
+name = "BetterNightVision V22"
 description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
@@ -6,7 +6,7 @@ Thanks to Fuzzy Waffle and Tony
 The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
 
 author = "Rockou_ With Help From the Community"
-version = "19"
+version = "22"
 api_version_dst = 10
 
 dst_compatible = true
@@ -47,9 +47,57 @@ configuration_options = {
         default = "KEY_X",
     },
     {
-        label = "Enable Color Cubes Override",
-        hover = "Whether to override color cubes or not",
-        name = "NIGHTVISION_COLOR_CUBES_OVERRIDE_ENABLE",
+        label = "Night Vision Strength",
+        hover = "Night Vision Strength",
+        name = "NIGHTVISION_STRENGTH",
+        options = {
+            {
+                description = "10%",
+                data = 0.1
+            },
+            {
+                description = "20%",
+                data = 0.2
+            },
+            {
+                description = "30%",
+                data = 0.3
+            },
+            {
+                description = "40%",
+                data = 0.4
+            },
+            {
+                description = "50%",
+                data = 0.5
+            },
+            {
+                description = "60%",
+                data = 0.6
+            },
+            {
+                description = "70%",
+                data = 0.7
+            },
+            {
+                description = "80%",
+                data = 0.8
+            },
+            {
+                description = "90%",
+                data = 0.9
+            },
+            {
+                description = "100%",
+                data = 1
+            }
+        },
+        default = 0.3,
+    },
+    {
+        label = "Notify",
+        hover = "Make the character say the nightvision status (ONLY WHEN CHANGED)",
+        name = "NIGHTVISION_NOTIFY_ENABLE",
         options = {
             {
                 description = "Enabled",
@@ -61,48 +109,5 @@ configuration_options = {
             }
         },
         default = true
-    },
-    {
-        label = "Color Cubes Override Value",
-        hover = "Color Cubes to use",
-        name = "NIGHTVISION_COLOR_CUBES_OVERRIDE_VALUE",
-        options = {
-            { description = "Default",         data = "",                                                  hover = "Keep what would be the current filter, without moggle vision"},
-            { description = "Identity",        data = "images/colour_cubes/identity_colourcube.tex",       hover = "Default \"Identity\" filter"},
-            { description = "Autumn Day",      data = "images/colour_cubes/day05_cc.tex",                  hover = "Autumn Day Filter"},
-            { description = "Winter Day",      data = "images/colour_cubes/snow_cc.tex",                   hover = "Winter Day Filter"},
-            { description = "Winter Night",    data = "images/colour_cubes/night04_cc.tex",                hover = "Winter Night Filter"},
-            { description = "Spring Day",      data = "images/colour_cubes/spring_day_cc.tex",             hover = "Spring Day Filter"},
-            { description = "Spring Dusk",     data = "images/colour_cubes/spring_dusk_cc.tex",            hover = "Spring Dusk Filter"},
-            { description = "Summer Day",      data = "images/colour_cubes/summer_day_cc.tex",             hover = "Summer Day Filter"},
-            { description = "Summer Dusk",     data = "images/colour_cubes/summer_dusk_cc.tex",            hover = "Summer Dusk Filter"},
-            { description = "Summer Night",    data = "images/colour_cubes/summer_night_cc.tex",           hover = "Summer Night Filter"},
-            { description = "Caves",           data = "images/colour_cubes/caves_default.tex",             hover = "Caves Filter"},
-            { description = "Ruins Calm",      data = "images/colour_cubes/ruins_dark_cc.tex",             hover = "DST: Ruins Calm Phase Filter"},
-            { description = "Ruins Warning",   data = "images/colour_cubes/ruins_dim_cc.tex",              hover = "DST: Ruins Warning Phase Filter"},
-            { description = "Ruins Wild",      data = "images/colour_cubes/ruins_light_cc.tex",            hover = "DST: Ruins Wild Phase Filter"},
-            { description = "Were Form",       data = "images/colour_cubes/beaver_vision_cc.tex",          hover = "Woodie's Were Form Filter"},
-            { description = "Fungus",          data = "images/colour_cubes/fungus_cc.tex",                 hover = "DST: Fungus Forest Filter"},
-            { description = "Moon Storm",      data = "images/colour_cubes/moonstorm_cc.tex",              hover = "Moon Storm Filter"},
-            { description = "Full Moon",       data = "images/colour_cubes/purple_moon_cc.tex",            hover = "Full Moon Filter"},
-            { description = "Lunacy",          data = "images/colour_cubes/lunacy_regular_cc.tex",         hover = "DST: Lunacy Filter"},
-            { description = "Ghost",           data = "images/colour_cubes/ghost_cc.tex",                  hover = "DST: Ghost Filter"}
-            --[[
-            {
-                description = "CC Name",
-                data = "CC Directory Path",
-                hover = "CC Config Tip - Not Required"
-            },
-            ]]
-        },
-        default = ""
     }
-    --,
-    --{
-    --    label = "CC table override Toggle Key",
-    --    hover = "The key that will toggle color cube table override",
-    --    name = "cck",
-    --    options = keylist,
-    --    default = "KEY_X",
-    --}
 }
