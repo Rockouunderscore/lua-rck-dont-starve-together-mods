@@ -6,7 +6,7 @@ Thanks to Fuzzy Waffle and Tony
 The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
 
 author = "Rockou_ With Help From the Community"
-version = "22"
+version = "23"
 api_version_dst = 10
 
 dst_compatible = true
