@@ -1,4 +1,4 @@
-name = "BetterNightVision V22"
+name = "BetterNightVision V23"
 description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
@@ -48,7 +48,7 @@ configuration_options = {
     },
     {
         label = "Night Vision Strength",
-        hover = "Night Vision Strength",
+        hover = "Night Vision Strength, incompatible with Darkness Alert",
         name = "NIGHTVISION_STRENGTH",
         options = {
             {
@@ -98,6 +98,22 @@ configuration_options = {
         label = "Notify",
         hover = "Make the character say the nightvision status (ONLY WHEN CHANGED)",
         name = "NIGHTVISION_NOTIFY_ENABLE",
+        options = {
+            {
+                description = "Enabled",
+                data = true
+            },
+            {
+                description = "Disabled",
+                data = false
+            }
+        },
+        default = true
+    },
+    {
+        label = "Darkness Alert",
+        hover = "Shows an indicator when in darkness and the nightvision is active, incompatible with Night Vision Strength",
+        name = "NIGHTVISION_ALERT_ENABLE",
         options = {
             {
                 description = "Enabled",
