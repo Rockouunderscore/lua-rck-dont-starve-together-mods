@@ -1,4 +1,4 @@
-name = "BetterNightVision V24"
+name = "BetterNightVision V25"
 description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
@@ -6,7 +6,7 @@ Thanks to Fuzzy Waffle and Tony
 The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
 
 author = "Rockou_ With Help From the Community"
-version = "24"
+version = "25"
 api_version_dst = 10
 
 dst_compatible = true
@@ -38,19 +38,107 @@ for i = 1, #keys do
 end
 keylist[#keylist + 1] = {description = "Disabled", data = false}
 
+---@param title string
+---@return table
+local function Title(title)
+    return {
+        name=title,
+        hover = "",
+        options={{description = "", data = 0}},
+        default = 0,
+    }
+end
+
 configuration_options = {
+    Title("Main settings"),
     {
-        label = "Night vision Toggle Key",
+        label = "Night vision toggle Key",
         hover = "The key that will toggle night vision",
         name = "NIGHTVISION_TOGGLE_KEY",
         options = keylist,
         default = "KEY_X",
     },
     {
+        label = "Notify",
+        hover = "Make the character say the night vision status (Only when changed)",
+        name = "NIGHTVISION_NOTIFY_ENABLE",
+        options = {
+            {
+                description = "Enabled",
+                data = true
+            },
+            {
+                description = "Disabled",
+                data = false
+            }
+        },
+        default = true
+    },
+    {
+        label = "Darkness Alert",
+        hover = "Shows an indicator when in darkness and the night vision is active",
+        name = "NIGHTVISION_ALERT_ENABLE",
+        options = {
+            {
+                description = "Enabled",
+                data = true
+            },
+            {
+                description = "Disabled",
+                data = false
+            }
+        },
+        default = true
+    },
+    {
+        label = "Allow actions in darkness",
+        hover = "Allows you to perform actions as if you really had moggles on, some things will be blocked server side",
+        name = "NIGHTVISION_DARKNESS_ACTION_ENABLE",
+        options = {
+            {
+                description = "Enabled",
+                data = true
+            },
+            {
+                description = "Disabled",
+                data = false
+            }
+        },
+        default = true
+    },
+
+    Title("Game behavior edits"),
+
+    {
+        label = "Delete Moggle color cubes",
+        hover = "Completely disables the moggle color cubes, can avoid some weird interactions",
+        name = "NIGHTVISION_MOGGLE_DELETE_ENABLED",
+        options = {
+            {
+                description = "Enabled",
+                data = true
+            },
+            {
+                description = "Disabled",
+                data = false
+            }
+        },
+        default = true
+    },
+
+    {
         label = "Night Vision Strength",
-        hover = "Night Vision Strength",
+        hover = "How bright should the night vision be",
         name = "NIGHTVISION_STRENGTH",
         options = {
+            {
+                description = "Disabled",
+                data = false
+            },
+            {
+                description = "0%",
+                data = 0.0
+            },
             {
                 description = "10%",
                 data = 0.1
@@ -58,6 +146,10 @@ configuration_options = {
             {
                 description = "20%",
                 data = 0.2
+            },
+            {
+                description = "25%",
+                data = 0.25
             },
             {
                 description = "30%",
@@ -80,6 +172,10 @@ configuration_options = {
                 data = 0.7
             },
             {
+                description = "75%",
+                data = 0.75
+            },
+            {
                 description = "80%",
                 data = 0.8
             },
@@ -92,38 +188,6 @@ configuration_options = {
                 data = 1
             }
         },
-        default = 0.3,
+        default = 0.4,
     },
-    {
-        label = "Notify",
-        hover = "Make the character say the nightvision status (ONLY WHEN CHANGED)",
-        name = "NIGHTVISION_NOTIFY_ENABLE",
-        options = {
-            {
-                description = "Enabled",
-                data = true
-            },
-            {
-                description = "Disabled",
-                data = false
-            }
-        },
-        default = true
-    },
-    {
-        label = "Darkness Alert",
-        hover = "Shows an indicator when in darkness and the nightvision is active",
-        name = "NIGHTVISION_ALERT_ENABLE",
-        options = {
-            {
-                description = "Enabled",
-                data = true
-            },
-            {
-                description = "Disabled",
-                data = false
-            }
-        },
-        default = true
-    }
 }
