@@ -123,7 +123,7 @@ configuration_options = {
                 data = false
             }
         },
-        default = true
+        default = false
     },
 
     {
@@ -188,6 +188,6 @@ configuration_options = {
                 data = 1
             }
         },
-        default = 0.4,
+        default = false,
     },
 }
