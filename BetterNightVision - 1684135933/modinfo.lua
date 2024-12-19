@@ -110,8 +110,8 @@ configuration_options = {
     Title("Game behavior edits"),
 
     {
-        label = "Delete Moggle color cubes",
-        hover = "Completely disables the moggle color cubes, can avoid some weird interactions",
+        label = "Patch out Moggle color cubes",
+        hover = "Should completely disable the moggles' color cubes, can avoid some weird interactions. This does not delete the moggle color cubes in the game's variables to keep some compatibility",
         name = "NIGHTVISION_MOGGLE_DELETE_ENABLED",
         options = {
             {
