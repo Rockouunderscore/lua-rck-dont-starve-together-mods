@@ -1,11 +1,16 @@
-name = "BetterNightVision V26"
-description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
+name = "BetterNightVision"
+description = [[
+Version 26
+
+Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
 Thanks to Fuzzy Waffle and Tony
-The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
+The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file
 
-author = "Rockou_ With Help From the Community"
+]]
+
+author = "Rockou_"
 version = "26"
 api_version_dst = 10
 
