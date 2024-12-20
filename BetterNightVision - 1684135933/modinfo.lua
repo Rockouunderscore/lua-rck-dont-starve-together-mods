@@ -1,4 +1,4 @@
-name = "BetterNightVision V25"
+name = "BetterNightVision V26"
 description = [[Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
 
@@ -6,7 +6,7 @@ Thanks to Fuzzy Waffle and Tony
 The snippets of code they've contributed to are shown in the mod's 'modmain.lua' file]]
 
 author = "Rockou_ With Help From the Community"
-version = "25"
+version = "26"
 api_version_dst = 10
 
 dst_compatible = true
@@ -50,14 +50,18 @@ local function Title(title)
 end
 
 configuration_options = {
+
     Title("Main settings"),
+
     {
         label = "Night vision toggle Key",
         hover = "The key that will toggle night vision",
         name = "NIGHTVISION_TOGGLE_KEY",
         options = keylist,
         default = "KEY_X",
+        is_keybind = true,
     },
+    
     {
         label = "Notify",
         hover = "Make the character say the night vision status (Only when changed)",
@@ -74,6 +78,7 @@ configuration_options = {
         },
         default = true
     },
+
     {
         label = "Darkness Alert",
         hover = "Shows an indicator when in darkness and the night vision is active",
@@ -90,6 +95,7 @@ configuration_options = {
         },
         default = true
     },
+
     {
         label = "Allow actions in darkness",
         hover = "Allows you to perform actions as if you really had moggles on, some things will be blocked server side",
@@ -111,19 +117,25 @@ configuration_options = {
 
     {
         label = "Patch out Moggle color cubes",
-        hover = "Should completely disable the moggles' color cubes, can avoid some weird interactions. This does not delete the moggle color cubes in the game's variables to keep some compatibility",
-        name = "NIGHTVISION_MOGGLE_DELETE_ENABLED",
+        hover = "Should completely disable the moggles' color cubes, can avoid some weird interactions.",
+        name = "NIGHTVISION_MOGGLE_FILTER_PATCH_MODE",
         options = {
             {
-                description = "Enabled",
-                data = true
+                description = "Disabled",
+                data = 0
             },
             {
-                description = "Disabled",
-                data = false
+                description = "Patch",
+                hover = "Work around in playervision component",
+                data = 1
+            },
+            {
+                description = "Delete",
+                hover = "Overrides the value to nil",
+                data = 2
             }
         },
-        default = false
+        default = 0
     },
 
     {
@@ -189,5 +201,6 @@ configuration_options = {
             }
         },
         default = false,
-    },
+    }
+
 }

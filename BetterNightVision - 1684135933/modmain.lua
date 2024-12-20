@@ -6,7 +6,7 @@ local function GetKeyFromConfig(config)
     return key and (type(key) == "number" and key or GLOBAL[key])
 end
 
----@type number
+---@type integer
 local NIGHTVISION_TOGGLE_KEY = GetKeyFromConfig("NIGHTVISION_TOGGLE_KEY")
 
 ---@type boolean
@@ -19,8 +19,8 @@ local NIGHTVISION_ALERT_ENABLE = GetModConfigData("NIGHTVISION_ALERT_ENABLE")
 local NIGHTVISION_DARKNESS_ACTION_ENABLE = GetModConfigData("NIGHTVISION_DARKNESS_ACTION_ENABLE")
 
 
----@type boolean
-local NIGHTVISION_MOGGLE_DELETE_ENABLED = GetModConfigData("NIGHTVISION_MOGGLE_DELETE_ENABLED")
+---@type 0|1|2
+local NIGHTVISION_MOGGLE_FILTER_PATCH_MODE = GetModConfigData("NIGHTVISION_MOGGLE_FILTER_PATCH_MODE")
 
 ---@type number|false
 local NIGHTVISION_STRENGTH = GetModConfigData("NIGHTVISION_STRENGTH")
@@ -30,14 +30,13 @@ local NIGHTVISION_STRENGTH = GetModConfigData("NIGHTVISION_STRENGTH")
 ---@type boolean
 local nightvision_active = false
 
-
 ---@return boolean
 local function InGame()
     --[[
         Part of this was recommended by "Tony",
-        More can be found in the steam workshop mod's comments
+        Can be found in the steam workshop mod's comments
         This is used to fix a crash
-            when using the night vision toggle key outside of the game
+            when using the night vision toggle key outside of a game
 
         Thanks
     ]]
@@ -62,7 +61,6 @@ local function InGame()
     return false
 
 end
--- end of thanks
 
 local nightvision_phasefn = {
     blendtime = 0,
@@ -127,6 +125,8 @@ local function ToggleNightVision()
 
     --#region enable nightvision if moggles are equiped
 
+    -- moggles vision seems to be directly related to the value in "playervision.nightvision"
+
     if not nightvision_active and GLOBAL.ThePlayer.components.playervision.nightvision then
         -- GLOBAL.ThePlayer.components.talker:Say(
         --     "nightvision: "..tostring(GLOBAL.ThePlayer.components.playervision.nightvision).."\n"..
@@ -147,13 +147,13 @@ local function ToggleNightVision()
     if NIGHTVISION_NOTIFY_ENABLE then
         GLOBAL.ThePlayer.components.talker:Say("Night Vision: "..tostring(nightvision_active))
     end
+
+    --#endregion
     
     -- GLOBAL.ThePlayer.components.talker:Say(
     --     "ToggleNightVision\n"..
     --     "nightvision: "..tostring(GLOBAL.ThePlayer.components.playervision.nightvision).."\n"..
     --     "forcenightvision: "..tostring(GLOBAL.ThePlayer.components.playervision.forcenightvision))
-
-    --#endregion
 
 end
 
@@ -167,11 +167,18 @@ end)
 
 if NIGHTVISION_ALERT_ENABLE then
 
+---@type number
+local NIGHTVISION_ALERT_SCALE_MODIFIER = 0.75
+---@type integer
+local NIGHTVISION_ALERT_SCALE_ITERATIONS = 8
+---@type integer
+local NIGHTVISION_ALERT_ACTIVE_COUNT_MAX = 2
+
     -- spawn a single darkness alert on an entity
     local function SpawnDarknessAlert(parent)
-        if not parent then
-            return
-        end
+
+        if not parent then return end
+
         local inst = GLOBAL.CreateEntity()
 
         --[[Non-networked entity]]
@@ -195,19 +202,19 @@ if NIGHTVISION_ALERT_ENABLE then
         inst.AnimState:SetScale(0, 0)
         inst.AnimState:SetAddColour(1,0,0,0)
         inst.entity:SetParent(parent.entity)
-        
-        local invert_scale = 16 -- lower is larger
-        local iterations = 8
-        for i=0,iterations do
+
+        for i=0, NIGHTVISION_ALERT_SCALE_ITERATIONS do
             inst:DoTaskInTime(GLOBAL.FRAMES*i, function(inst)
-                inst.AnimState:SetScale(i/invert_scale, i/invert_scale)
+                local size = i/NIGHTVISION_ALERT_SCALE_ITERATIONS * NIGHTVISION_ALERT_SCALE_MODIFIER
+                inst.AnimState:SetScale(size, size)
             end)
-            inst:DoTaskInTime(GLOBAL.FRAMES*(i+iterations+1), function(inst)
-                inst.AnimState:SetScale(1-i/invert_scale, 1-i/invert_scale)
+            inst:DoTaskInTime(GLOBAL.FRAMES*(NIGHTVISION_ALERT_SCALE_ITERATIONS+i+1), function(inst)
+                local size = (NIGHTVISION_ALERT_SCALE_ITERATIONS-i)/NIGHTVISION_ALERT_SCALE_ITERATIONS * NIGHTVISION_ALERT_SCALE_MODIFIER
+                inst.AnimState:SetScale(size, size)
             end)
         end
 
-        inst:DoTaskInTime(0.5, function(inst)
+        inst:DoTaskInTime(GLOBAL.FRAMES*(NIGHTVISION_ALERT_SCALE_ITERATIONS*2+1+1), function(inst)
             inst:Remove()
         end)
 
@@ -215,23 +222,33 @@ if NIGHTVISION_ALERT_ENABLE then
 
     local function TrySpawnDarknessAlert(inst)
 
-        if not inst.LightWatcher then return end
+        -- if inst.LightWatcher then
+        --     GLOBAL.ThePlayer.components.talker:Say("TrySpawnDarknessAlert\nLightValue: ".. inst.LightWatcher:GetLightValue())
+        -- end
 
-        -- GLOBAL.ThePlayer.components.talker:Say("LightValue: ".. inst.LightWatcher:GetLightValue())
-
-        if inst.LightWatcher:GetLightValue() < 0.1 and nightvision_active then
+        local spawnedAlert = false
+        if inst.LightWatcher and inst.LightWatcher:GetLightValue() < 0.1 and nightvision_active then
+            spawnedAlert = true
             SpawnDarknessAlert(inst)
+        end
+
+        -- this should allow it to be slightly more responsive with low framerate
+        if spawnedAlert then
+            inst:DoTaskInTime((GLOBAL.FRAMES*(NIGHTVISION_ALERT_SCALE_ITERATIONS*2+1))/NIGHTVISION_ALERT_ACTIVE_COUNT_MAX, TrySpawnDarknessAlert)
+        else
+            inst:DoTaskInTime(0.1, TrySpawnDarknessAlert)
         end
 
     end
 
     -- spawn alert periodically
     AddPlayerPostInit(function(inst)
-        inst:DoTaskInTime(0.25, function() -- wait for things to get setup, idk doesnt work without
+        inst:DoTaskInTime(0.25, function(inst) -- wait for things to get setup ... idk doesnt work without
 
             if inst ~= GLOBAL.ThePlayer then return end
 
-            inst:DoPeriodicTask(0.5, TrySpawnDarknessAlert)
+            -- inst:DoPeriodicTask(DARKNESS_ALERT_REFRESH_TIME, TrySpawnDarknessAlert)
+            inst:DoTaskInTime(0.25, TrySpawnDarknessAlert)
 
         end)
     end)
@@ -243,40 +260,51 @@ end
 local UpvalueHacker = GLOBAL.require("tools/upvaluehacker")
 local tablecopy = GLOBAL.require("tools/tablecopy")
 
-if NIGHTVISION_MOGGLE_DELETE_ENABLED then
+--#region moggles vision path / delete
 
-    -- AddClassPostConstruct("components/playervision", function (self)
-    --     UpvalueHacker.SetUpvalue(self.UpdateCCTable, nil, "NIGHTVISION_COLOURCUBES")
-    -- end)
-    AddComponentPostInit("playervision", function (self)
+if NIGHTVISION_MOGGLE_FILTER_PATCH_MODE ~= 0 then
 
-        local oldUpdateCCTable = self.UpdateCCTable
-        local newUpdateCCTable = function (self, override)
-            -- override should be true by default
+    if NIGHTVISION_MOGGLE_FILTER_PATCH_MODE == 1 then
 
+        AddClassPostConstruct("components/playervision", function (self)
+            -- luckily basically everything in playervision is public except for some constants
+            UpvalueHacker.SetUpvalue(self.UpdateCCTable, nil, "NIGHTVISION_COLOURCUBES")
+        end)
 
-            local old_forcenightvision = self.forcenightvision
-            local old_nightvision = self.nightvision
+    end
 
-            self.forcenightvision = false
-            self.nightvision = false
+    if NIGHTVISION_MOGGLE_FILTER_PATCH_MODE == 2 then
 
-            oldUpdateCCTable(self)
-
-            self.forcenightvision = old_forcenightvision
-            self.nightvision = old_nightvision
+        AddComponentPostInit("playervision", function (self)
     
-            -- GLOBAL.ThePlayer.components.talker:Say(
-            --     "UpdateCCTable\n"..
-            --     "nightvision: "..tostring(self.nightvision).."\n"..
-            --     "forcenightvision: "..tostring(self.forcenightvision))
-
-        end
-        self.UpdateCCTable = newUpdateCCTable
-
-    end)
-
+            local oldUpdateCCTable = self.UpdateCCTable
+            local newUpdateCCTable = function (self)
+    
+                local old_forcenightvision = self.forcenightvision
+                local old_nightvision = self.nightvision
+    
+                self.forcenightvision = false
+                self.nightvision = false
+    
+                oldUpdateCCTable(self)
+    
+                self.forcenightvision = old_forcenightvision
+                self.nightvision = old_nightvision
+        
+                -- GLOBAL.ThePlayer.components.talker:Say(
+                --     "UpdateCCTable\n"..
+                --     "nightvision: "..tostring(self.nightvision).."\n"..
+                --     "forcenightvision: "..tostring(self.forcenightvision))
+    
+            end
+            self.UpdateCCTable = newUpdateCCTable
+    
+        end)
+    
+    end
 end
+
+--#endregion
 
 local function GetColorsFromRGB(rgb)
     return {
@@ -300,7 +328,7 @@ if NIGHTVISION_STRENGTH ~= false then
     AddClassPostConstruct("components/ambientlighting", function(self)
         -- print("ROCKOU_ AddClassPostConstruct(\"components/ambientlighting\", function(self)")
 
-        local realcolor = UpvalueHacker.GetUpvalue(self.OnUpdate, "_realcolour")
+        -- local realcolor = UpvalueHacker.GetUpvalue(self.OnUpdate, "_realcolour")
 
         local overridecolor = UpvalueHacker.GetUpvalue(self.OnUpdate, "_overridecolour")
 
