@@ -18,6 +18,12 @@ local NIGHTVISION_ALERT_ENABLE = GetModConfigData("NIGHTVISION_ALERT_ENABLE")
 ---@type boolean
 local NIGHTVISION_DARKNESS_ACTION_ENABLE = GetModConfigData("NIGHTVISION_DARKNESS_ACTION_ENABLE")
 
+---@type number
+local NIGHTVISION_ALERT_TRESHOLD = GetModConfigData("NIGHTVISION_ALERT_TRESHOLD")
+
+---@type number
+local NIGHTVISION_ALERT_FREQUENCY = GetModConfigData("NIGHTVISION_ALERT_FREQUENCY")
+
 
 ---@type 0|1|2
 local NIGHTVISION_MOGGLE_FILTER_PATCH_MODE = GetModConfigData("NIGHTVISION_MOGGLE_FILTER_PATCH_MODE")
@@ -227,17 +233,19 @@ local NIGHTVISION_ALERT_ACTIVE_COUNT_MAX = 2
         -- end
 
         local spawnedAlert = false
-        if inst.LightWatcher and inst.LightWatcher:GetLightValue() < 0.1 and nightvision_active then
+        if inst.LightWatcher and inst.LightWatcher:GetLightValue() < NIGHTVISION_ALERT_TRESHOLD and nightvision_active then
             spawnedAlert = true
             SpawnDarknessAlert(inst)
         end
 
+        local time_between_alerts = (GLOBAL.FRAMES*(NIGHTVISION_ALERT_SCALE_ITERATIONS*2+1))/NIGHTVISION_ALERT_ACTIVE_COUNT_MAX
+        local time_until_next_attempt = NIGHTVISION_ALERT_FREQUENCY
         -- this should allow it to be slightly more responsive with low framerate
         if spawnedAlert then
-            inst:DoTaskInTime((GLOBAL.FRAMES*(NIGHTVISION_ALERT_SCALE_ITERATIONS*2+1))/NIGHTVISION_ALERT_ACTIVE_COUNT_MAX, TrySpawnDarknessAlert)
-        else
-            inst:DoTaskInTime(0.1, TrySpawnDarknessAlert)
+            time_until_next_attempt = math.max(time_between_alerts, NIGHTVISION_ALERT_FREQUENCY)
         end
+
+        inst:DoTaskInTime(time_until_next_attempt, TrySpawnDarknessAlert)
 
     end
 
