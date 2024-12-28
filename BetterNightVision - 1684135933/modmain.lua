@@ -47,12 +47,12 @@ local function InGame()
         Thanks
     ]]
 
-    if GLOBAL.ThePlayer then
-        return true
+    if not GLOBAL.ThePlayer then
+        return false
     end
 
-    if GLOBAL.ThePlayer.HUD then
-        return true
+    if not GLOBAL.ThePlayer.HUD then
+        return false
     end
 
     if GLOBAL.ThePlayer.HUD:HasInputFocus() then
@@ -64,7 +64,7 @@ local function InGame()
         return false
     end
 
-    return false
+    return true
 
 end
 
