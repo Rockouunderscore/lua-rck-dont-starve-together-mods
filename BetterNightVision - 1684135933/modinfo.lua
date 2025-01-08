@@ -1,6 +1,6 @@
 name = "BetterNightVision"
 description = [[
-Version 28
+Version 33
 
 Removes Moggles Black/Red effect and add nightvision with the selected Hotkey	(Default = X)
 The nightvision DOESN'T protect you from charlie (Unless you play in a world without caves(and you are host))
@@ -11,7 +11,7 @@ The snippets of code they've contributed to are shown in the mod's 'modmain.lua'
 ]]
 
 author = "Rockou_"
-version = "28"
+version = "33"
 api_version_dst = 10
 
 dst_compatible = true
@@ -59,18 +59,18 @@ configuration_options = {
     Title("Main settings"),
 
     {
+        name = "NIGHTVISION_TOGGLE_KEY",
         label = "Night vision toggle Key",
         hover = "The key that will toggle night vision",
-        name = "NIGHTVISION_TOGGLE_KEY",
         options = keylist,
         default = "KEY_X",
         is_keybind = true,
     },
     
     {
+        name = "NIGHTVISION_NOTIFY_ENABLE",
         label = "Notify on toggle",
         hover = "Make the character say the night vision status (Only when changed)",
-        name = "NIGHTVISION_NOTIFY_ENABLE",
         options = {
             {
                 description = "Enabled",
@@ -87,13 +87,13 @@ configuration_options = {
     },
 
     {
+        name = "NIGHTVISION_DARKNESS_ACTION_ENABLE",
         label = "Allow actions in darkness",
         hover = "Allows you to perform actions as if you really had moggles on, some things will be blocked server side",
-        name = "NIGHTVISION_DARKNESS_ACTION_ENABLE",
         options = {
             {
                 description = "Enabled",
-                hover = "",
+                hover = "May require a moggle color cube patch mode other than default to work nicely",
                 data = true
             },
             {
@@ -108,9 +108,9 @@ configuration_options = {
     Title("Darkness Alert"),
 
     {
+        name = "NIGHTVISION_DARKNESS_ALERT_ENABLE",
         label = "Darkness Alert Enabled",
         hover = "Shows an indicator when in darkness and the night vision is active",
-        name = "NIGHTVISION_ALERT_ENABLE",
         options = {
             {
                 description = "Disabled",
@@ -127,9 +127,9 @@ configuration_options = {
     },
 
     {
+        name = "NIGHTVISION_DARKNESS_ALERT_TRESHOLD",
         label = "Darkness Alert Treshold",
         hover = "How dark it should be before we start showing the alert",
-        name = "NIGHTVISION_ALERT_TRESHOLD",
         options = {
             {
                 description = "Leave safety",
@@ -161,9 +161,9 @@ configuration_options = {
     },
 
     {
+        name = "NIGHTVISION_DARKNESS_ALERT_FREQUENCY",
         label = "Darkness Alert Frequency",
         hover = "How often should we try to spawn the alert, but might cause lag if too high",
-        name = "NIGHTVISION_ALERT_FREQUENCY",
         options = {
             {
                 description = "16ms",
@@ -237,27 +237,105 @@ configuration_options = {
     Title("Game behavior edits"),
 
     {
-        label = "Patch out Moggle color cubes",
-        hover = "Should completely disable the moggles' color cubes, can avoid some weird interactions.",
-        name = "NIGHTVISION_MOGGLE_FILTER_PATCH_MODE",
+        name = "VISION_BLENDTIME",
+        label = "Blend time (photosensitivity)",
+        hover = "blendtime for when we update color cubes, frame time is at 60 frame per second, 1 frame is 0.01667 second, ask in comments for additional options",
         options = {
             {
-                description = "Disabled",
+                description = "1 frame",
+                hover = "Instant",
+                data = 1/60
+            },
+            {
+                description = "5 frames",
                 hover = "",
+                data = 5/60
+            },
+            {
+                description = "10 frames",
+                hover = "",
+                data = 10/60
+            },
+            {
+                description = "15 frames",
+                hover = "Default for moggle vision",
+                data = 15/60
+            },
+            {
+                description = "30 frames",
+                hover = "",
+                data = 30/60
+            },
+            {
+                description = "45 frames",
+                hover = "",
+                data = 30/60
+            },
+            {
+                description = "60 frames",
+                hover = "",
+                data = 1
+            }
+        },
+        default = 1/60
+    },
+
+    {
+        name = "NIGHTVISION_COLORCUBES_PATCH_MODE",
+        label = "Night vision color cubes",
+        hover = "Avoid weird interactions with moggle vision, higher is more invasive",
+        options = {
+            {
+                description = "1. Default",
+                hover = "Will only affect vision when toggling the nightvision",
                 data = 0
             },
             {
-                description = "Patch",
-                hover = "Work around in playervision component",
+                description = "2. Override",
+                hover = "Listen to events and reset the vision accordingly",
                 data = 1
             },
             {
-                description = "Delete",
-                hover = "Overrides the value to nil",
+                description = "3. Patch",
+                hover = "Work around in playervision component directly",
                 data = 2
+            },
+            {
+                description = "4. Delete",
+                hover = "Override the value to nil",
+                data = 3
             }
         },
-        default = 0
+        default = 1
+    },
+
+    {
+        name = "GHOSTVISION_COLORCUBES_PATCH_MODE",
+        label = "Ghost vision color cubes",
+        hover = "PHOTOSENSITIVITY WARNING, If you want a nice nightvision while dead, higher is more invasive",
+        options = {
+            {
+                description = "1. Default",
+                hover = "Will only affect vision when toggling the nightvision",
+                data = 0
+            },
+            {
+                description = "2. Override",
+                hover = "Listen to events and reset the vision accordingly",
+                data = 1
+            },
+            {
+                description = "3. Patch",
+                hover = "Work around in playervision component directly",
+                data = 2
+            },
+            {
+                description = "4. Delete",
+                hover = "Override the value to nil",
+                data = 3
+            }
+        },
+        default = 1
     },
 
     {
