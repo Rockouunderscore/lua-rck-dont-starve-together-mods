@@ -103,6 +103,9 @@ local nightvision_phasefn = {
 
 local function ResetVision(player)
     -- print("ROCKOU ResetVision")
+    if GHOSTVISION_COLORCUBES_PATCH_MODE == 0 and NIGHTVISION_COLORCUBES_PATCH_MODE == 0 then
+        return
+    end
 
     local playervision = player.components.playervision
 
@@ -312,29 +315,15 @@ local function OnPlayerPostInit_ResetVision(inst)
         inst:ListenForEvent("changearea", PushResetVision) -- cave nightmare cycle
         inst:ListenForEvent("phasechange", PushResetVision) -- day cycle phase change
 
+        -- death and revive
         if inst.player_classified ~= nil then
             inst.player_classified:ListenForEvent("isghostmodedirty", function (inst)
                 -- print("ROCKOU Event isghostmodedirty")
                 PushResetVision(inst._parent)
             end)
         end
-
-        -- cant listen to death or revive event as they are server only :(
-        -- inst:ListenForEvent("death", function ()
-        --     print("ROCKOU Event death")
-        --     PushResetVision(inst)
-        -- end) -- on death
-
-        -- inst:ListenForEvent("respawnfromghost", function ()
-        --     print("ROCKOU Event respawnfromghost")
-        --     PushResetVision(inst)
-        -- end) -- on revive
     end
 end
-
--- local function OnPlayerClassifiedPostInit(inst)
---     inst:ListenForEvent("isghostmodedirty", )
--- end
 
 --#endregion
 
@@ -349,7 +338,7 @@ function OnPlayerPostInit(inst)
 
 end
 
-if NIGHTVISION_DARKNESS_ALERT_ENABLE == true or NIGHTVISION_COLORCUBES_PATCH_MODE == 2 or GHOSTVISION_COLORCUBES_PATCH_MODE == 2 then
+if NIGHTVISION_DARKNESS_ALERT_ENABLE == true or NIGHTVISION_COLORCUBES_PATCH_MODE == 1 or GHOSTVISION_COLORCUBES_PATCH_MODE == 1 then
 
     AddPlayerPostInit(function(inst)
         -- print("ROCKOU AddPlayerPostInit")
@@ -360,7 +349,7 @@ end
 
 --#region moggles vision patch / delete
 
-if NIGHTVISION_COLORCUBES_PATCH_MODE == 3 or GHOSTVISION_COLORCUBES_PATCH_MODE == 3 then
+if NIGHTVISION_COLORCUBES_PATCH_MODE == 2 or GHOSTVISION_COLORCUBES_PATCH_MODE == 2 then
 
     AddComponentPostInit("playervision", function (self)
 
@@ -373,11 +362,11 @@ if NIGHTVISION_COLORCUBES_PATCH_MODE == 3 or GHOSTVISION_COLORCUBES_PATCH_MODE =
             local old_nightvision = self.nightvision
             local old_ghostvision = self.ghostvision
 
-            if NIGHTVISION_COLORCUBES_PATCH_MODE == 3 then
+            if NIGHTVISION_COLORCUBES_PATCH_MODE >= 2 then
                 self.forcenightvision = false
                 self.nightvision = false
             end
-            if GHOSTVISION_COLORCUBES_PATCH_MODE == 3 then
+            if GHOSTVISION_COLORCUBES_PATCH_MODE >= 2 then
                 self.ghostvision = false
             end
 
@@ -396,15 +385,15 @@ if NIGHTVISION_COLORCUBES_PATCH_MODE == 3 or GHOSTVISION_COLORCUBES_PATCH_MODE =
 
 end
 
-if NIGHTVISION_COLORCUBES_PATCH_MODE == 4 or GHOSTVISION_COLORCUBES_PATCH_MODE == 4 then
+if NIGHTVISION_COLORCUBES_PATCH_MODE == 3 or GHOSTVISION_COLORCUBES_PATCH_MODE == 3 then
 
     AddClassPostConstruct("components/playervision", function (self)
         -- luckily basically everything in playervision is public except for some constants
         -- this gives us easy access to those privates
-        if NIGHTVISION_COLORCUBES_PATCH_MODE == 4 then
+        if NIGHTVISION_COLORCUBES_PATCH_MODE == 3 then
             UpvalueHacker.SetUpvalue(self.UpdateCCTable, nil, "NIGHTVISION_COLOURCUBES")
         end
-        if GHOSTVISION_COLORCUBES_PATCH_MODE == 4 then
+        if GHOSTVISION_COLORCUBES_PATCH_MODE == 3 then
             UpvalueHacker.SetUpvalue(self.UpdateCCTable, nil, "GHOSTVISION_COLOURCUBES")
         end
     end)
